@@ -1,3 +1,12 @@
+// require("dotenv").config()
+import dotenv from "dotenv";
+import ConnectDB from "./db/index.js";
+
+dotenv.config({
+    path: ".env"
+})
+
+ConnectDB();
 
 
 
@@ -14,11 +23,7 @@
 
 
 
-
-
-
-
-
+/*
 
 import express from "express"
 const app = express()
@@ -40,3 +45,4 @@ const app = express()
     }
 })()
 
+*/
