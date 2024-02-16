@@ -1,5 +1,8 @@
 import mongoose, {Schema} from "mongoose";
 
+import jwt from "jsonwebtoken" // to generate token for user 
+import bcrypt from "bcrypt" // to hash password 
+
 const userSchema = new Schema(
     {
         username: {
@@ -49,6 +52,16 @@ const userSchema = new Schema(
         timestamps: true
     }
 )
+
+// generate token for user 
+// we use pre method to run this function before the user is saved to the database and it hash the password and save it to the database
+
+userSchema.pre("save", async function (next) {
+    if(!this.isModified("password")) return next(); // if the password is not modified, we return next b/c we don't want to hash the password again if the pass is not modified
+
+    this.password = await bcrypt.hash(this.password, 10)
+    next()
+})
 
 
 export const User = mongoose.model("User", userSchema)
