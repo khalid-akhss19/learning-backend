@@ -16,4 +16,13 @@ app.use(express.static('public')) // Serve static files
 app.use(cookieParser(process.env.COOKIE_SECRET)) // Parse Cookie header and populate req.cookies with an object keyed by the cookie names.  
 
 
+//routes import
+import userRouter from './routes/user.routes.js' // import the userRouter from the user.routes.js file
+
+//routes declaration
+// app.use("users", userRouter) // use the userRouter for the /users route
+
+//best practice usecase
+app.use("/api/v1/users", userRouter) // use the userRouter for the /users route
+
 export {app}
