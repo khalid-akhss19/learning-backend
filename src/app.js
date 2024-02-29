@@ -20,7 +20,7 @@ app.use(cookieParser(process.env.COOKIE_SECRET)) // Parse Cookie header and popu
 import userRouter from './routes/user.routes.js' // import the userRouter from the user.routes.js file
 
 //routes declaration
-app.use("/users", userRouter) // use the userRouter for the /users route
+app.use("/api/v1/users", userRouter) // use the userRouter for the /users route
 
 //best practice usecase
 // app.post("/user", (req, res) => {
