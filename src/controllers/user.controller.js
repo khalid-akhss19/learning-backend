@@ -1,6 +1,7 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User} from "../models/user.model.js"
+import {ApiResponse} from "../utils/ApiResponse.js"
 
 
 const registerUser = asyncHandler(async (req, res) => {
@@ -41,11 +42,47 @@ const registerUser = asyncHandler(async (req, res) => {
 if (existedUser) {
     throw new ApiError(409, "User with email or username already exists")
 }
+
+if (!avatarLocalPath) {
+    throw new ApiError(400, "Avatar file is required.");
+}
+
+const avatar = await uploadOnCloudinary(avatarLocalPath);
+if (!avatar) {
+        throw new ApiError(400, "Avator is required.");
+    }
+
+// Assuming you also want to check for cover image path
+// if (!coverImageLocalPath) {
+//     throw new ApiError(400, "Cover image file is required.");
+// }
+
+const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+
+//no we will create user object
+
+const user = await User.create({
+    fullName,
+    avatar: avatar.url,
+    coverImage: coverImage?.url || "", // if cover image is not provided, we set it to an empty string it is optional
+    email, 
+    password,
+    username: username.toLowerCase()
+})
+
+//remove password and refresh token from response and also check for response
+
+const createdUser = await User.findById(user._id).select(
+    "-password -refreshToken"
+)
+
+if (!createdUser) {
+    throw new ApiError(500, "Something went wrong while registering the user")
+}
+
+
+
+
 });
-
-
-
-
-
 
 export { registerUser };
