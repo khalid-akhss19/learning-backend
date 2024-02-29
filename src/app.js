@@ -1,7 +1,7 @@
 import express from "express"
 import cors from "cors"; // Cross Origin Resource Sharing 
 import cookieParser from "cookie-parser"; // Parse Cookie header and populate req.cookies with an object keyed by the cookie names.
-
+console.log("running app.js")
 const app = express()
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
@@ -20,9 +20,12 @@ app.use(cookieParser(process.env.COOKIE_SECRET)) // Parse Cookie header and popu
 import userRouter from './routes/user.routes.js' // import the userRouter from the user.routes.js file
 
 //routes declaration
-// app.use("users", userRouter) // use the userRouter for the /users route
+app.use("/users", userRouter) // use the userRouter for the /users route
 
 //best practice usecase
-app.use("/api/v1/users", userRouter) // use the userRouter for the /users route
+// app.post("/user", (req, res) => {
+//     console.log("hitted")
+//     res.status(200).json({ message: "OK" });
+// }) // use the userRouter for the /users route
 
 export {app}
